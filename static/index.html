@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>leakscope</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+  <h1>leakscope</h1>
+  <p class="lead">
+    Allt den här sidan vet om dig, hämtat från en enda anslutning. Inget lämnar din maskin —
+    servern kör lokalt och sparar bara i minnet.
+  </p>
+
+  <div class="summary">
+    <div class="card">
+      <span class="card-label">Ditt sammansatta fingeravtryck</span>
+      <code id="fp" class="big">beräknar…</code>
+    </div>
+    <div class="card">
+      <span class="card-label">Hur unikt ditt avtryck är</span>
+      <code id="bits" class="big">…</code>
+      <span class="card-note" id="pop"></span>
+    </div>
+    <div class="card card-alert">
+      <span class="card-label">Vad privat läge åtgärdar</span>
+      <code id="privcount" class="big">…</code>
+      <span class="card-note" id="privnote"></span>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="reload">Ladda om</button>
+    <span class="stamp">mätt <span id="stamp">…</span></span>
+  </div>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<section id="s0">
+  <h2>Hur lätt är du att följa? <span class="tag tag-green">uppmätt, inte gissat</span></h2>
+  <p class="lead">
+    Två axlar, inte ett betyg. <strong>Exponering</strong> är hur mycket av dig som går att
+    läsa. <strong>Länkbarhet</strong> är hur väl det följer dig mellan besök. En webbläsare som
+    läcker allt men slumpar värdena varje gång är svårare att följa än en som läcker hälften
+    och är stabil — och randomiseringen gissas inte, den mäts genom att köra samma avläsning
+    två gånger och jämföra.
+  </p>
+  <div id="level" class="panel">mäter…</div>
+</section>
+
+<section id="s1">
+  <h2>1 · Passivt <span class="tag tag-red">ingen JavaScript behövs</span></h2>
+  <p class="lead">
+    Det här lämnar du ifrån dig i samma ögonblick som anslutningen upprättas, innan en enda rad kod
+    körts i din webbläsare. Att blockera skript hjälper inte mot något av det nedan.
+  </p>
+  <div id="server" class="panel">laddar…</div>
+</section>
+
+<section id="s2">
+  <h2>2 · Aktivt <span class="tag tag-amber">JavaScript frågar efter det</span></h2>
+  <p class="lead">
+    Varje rad är ett anrop vilken sajt som helst kan göra, utan tillstånd och utan att du märker det.
+    Enskilt säger de lite. Tillsammans pekar de ut en enda maskin.
+  </p>
+  <div id="client" class="panel">laddar…</div>
+</section>
+
+<section id="s3">
+  <h2>3 · Spårning utan cookies <span class="tag tag-red">överlever att du rensar</span></h2>
+
+  <h3>Länkbarhet via fingeravtryck</h3>
+  <div id="link" class="panel">laddar…</div>
+
+  <h3>ETag som tyst id</h3>
+  <div id="etag" class="panel">laddar…</div>
+</section>
+
+<section id="s4">
+  <h2>4 · Jämför webbläsare <span class="tag tag-green">spara och ställ mot varandra</span></h2>
+  <p class="lead">
+    Varje anslutning sparas automatiskt — du behöver inte trycka på något. Öppna bara sidan i en
+    annan webbläsare, eller i privat läge, så dyker den upp här. Omladdningar i samma webbläsare
+    uppdaterar sin egen rad i stället för att lägga till nya. Den intressanta jämförelsen är inte
+    Firefox mot Brave, utan Firefox mot <em>samma</em> Firefox i privat läge.
+  </p>
+
+  <div class="savebar">
+    <input id="label" type="text" placeholder="Namn på det här besöket" autocomplete="off">
+    <button id="rename">Döp om</button>
+    <span id="saved" class="stamp"></span>
+  </div>
+
+  <h3>Sparade besök</h3>
+  <div id="visits" class="panel">laddar…</div>
+
+  <h3>Jämförelse</h3>
+  <div class="comparebar">
+    <select id="pickA"></select>
+    <span class="vs">mot</span>
+    <select id="pickB"></select>
+    <button id="compare">Jämför dessa två anslutningar</button>
+  </div>
+  <div id="diff" class="panel"></div>
+</section>
+
+<section id="s5">
+  <h2>5 · Vad som vet att du är du <span class="tag tag-red">överlever byte av webbläsare</span></h2>
+  <p class="lead">
+    Jämförelsen ovan visar vad som <em>skiljer</em> två anslutningar. Det här visar motsatsen:
+    vad som är <strong>identiskt i samtliga</strong> dina sparade besök. Den mängden bryr sig
+    inte om att du bytte webbläsare eller gick till privat läge — den beskriver maskinen och
+    nätet, inte programmet du surfar med.
+  </p>
+  <div id="identity" class="panel">laddar…</div>
+</section>
+
+<section id="s6">
+  <h2>6 · Så här hittar jag dig <span class="tag tag-red">uträknat, inte påstått</span></h2>
+  <p class="lead">
+    Sidan har visat <em>att</em> du är identifierbar. Det här visar <strong>vilka attribut som
+    faktiskt gör jobbet</strong>. Jag börjar med alla webbläsare servern sett, väljer det
+    attribut som skär bort flest, och upprepar tills bara du är kvar. Sedan tar jag bort vart
+    och ett av dem och räknar om — för att se om det finns en annan väg fram.
+  </p>
+  <div id="narrow" class="panel">räknar…</div>
+</section>
+
+<section id="s7">
+  <h2>7 · Profilen de bygger <span class="tag tag-amber">allt sammanlagt</span></h2>
+  <p class="lead">
+    Enskilda rader säger lite. Så här ser det ut när allt på sidan läggs ihop till det en
+    annonsnätverkare faktiskt skulle lagra om dig — utan att du fyllt i ett enda fält.
+  </p>
+  <button id="dossier">Sätt ihop profilen</button>
+  <div id="profile" class="panel"></div>
+</section>
+
+<section id="boardsection">
+  <h2>8 · Unik i rummet <span class="tag tag-green">mätt, inte uppskattad</span></h2>
+  <p class="lead">
+    Entropisiffrorna högre upp är uppskattningar. Det här är mätt: hur många av dem som
+    faktiskt surfat in på den här servern delar dina värden?
+  </p>
+  <div id="board" class="panel">laddar…</div>
+</section>
+
+<section class="takeaway" id="s8">
+  <h2>Vad som faktiskt hjälper</h2>
+  <p>
+    Poängen är inte att varje punkt ska åtgärdas. De flesta går inte att åtgärda var för sig, och
+    att försöka gör dig i regel mer unik, inte mindre — en egenpillad webbläsare sticker ut skarpare
+    än en orörd. Det som fungerar är att se ut som många andra.
+  </p>
+  <ul>
+    <li><strong>Använd en webbläsare som gör jobbet åt dig.</strong> Tor Browser och Mullvad Browser
+      harmoniserar aktivt sina användare mot samma profil. Brave randomiserar canvas, audio och WebGL
+      per sajt och session.</li>
+    <li><strong>Blanda inte lager.</strong> VPN döljer din IP men inte tidszon, språk, TLS-avtryck
+      eller GPU. Ett VPN i Frankfurt med <code>Europe/Stockholm</code> och svenska språkinställningar
+      säger mer om dig än ingen VPN alls.</li>
+    <li><strong>Låt bli att spoofa User-Agent.</strong> Headerordning, TLS-handskakning och
+      motorquirks avslöjar lögnen, och kombinationen "påstår sig vara X men beter sig som Y" är
+      ovanligare än vilken ärlig profil som helst.</li>
+    <li><strong>Separera identiteter på webbläsarnivå, inte på flik- eller fönsternivå.</strong>
+      Olika profiler eller behållare, inte privat läge — privat läge skyddar mot din hushållsmedlem,
+      inte mot sajten.</li>
+    <li><strong>Acceptera att metadata inte går att nollställa.</strong> Målet är rimligt motstånd
+      mot korrelation, inte osynlighet.</li>
+  </ul>
+  <p class="muted">
+    Entropisiffrorna är grova uppskattningar för att visa storleksordning, inte mätningar mot en
+    verklig population. För riktiga siffror finns EFF:s Cover Your Tracks och AmIUnique, som jämför
+    mot en faktisk databas.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <p>Kör lokalt. Ingen data lämnar maskinen, ingenting skrivs till disk.
+     Serverns minne töms när processen avslutas.</p>
+</footer>
+
+<div id="viztip" role="tooltip" aria-hidden="true"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

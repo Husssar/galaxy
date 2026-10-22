@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Skydda dig</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+  /* Hotbildsväljaren är byggd av radioknappar och CSS, utan skript.
+     En sida om skydd bör klara sig utan att köra kod hos läsaren. */
+  .picker > input { position: absolute; opacity: 0; pointer-events: none; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 14px; }
+  .tabs label {
+    font-size: 0.82rem; padding: 8px 14px; border-radius: 8px;
+    border: 1px solid var(--line); cursor: pointer; color: var(--muted);
+  }
+  .tabs label:hover { border-color: var(--muted); color: var(--text); }
+  .panels .tp { display: none; }
+  #h1:checked ~ .panels #tp1, #h2:checked ~ .panels #tp2,
+  #h3:checked ~ .panels #tp3, #h4:checked ~ .panels #tp4 { display: block; }
+  #h1:checked ~ .tabs label[for="h1"], #h2:checked ~ .tabs label[for="h2"],
+  #h3:checked ~ .tabs label[for="h3"], #h4:checked ~ .tabs label[for="h4"] {
+    border-color: var(--accent); color: var(--accent); background: rgba(94,224,160,.07);
+  }
+  /* Åtgärds- och mytkorten läggs i rutnät på breda skärmar. */
+  #atgarder, #myter, #paket {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    gap: 12px;
+    align-items: start;
+  }
+  #atgarder > *:not(.measure),
+  #myter > *:not(.measure),
+  #paket > *:not(.measure) { grid-column: 1 / -1; }
+  #atgarder .measure, #myter .measure, #paket .measure { margin-bottom: 0; }
+  @media (max-width: 900px) {
+    #atgarder, #myter, #paket { grid-template-columns: 1fr; }
+  }
+  .measure {
+    background: var(--panel); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent); border-radius: 9px;
+    padding: 16px 18px; margin-bottom: 12px;
+  }
+  .measure.weak { border-left-color: var(--amber); }
+  .measure.myth { border-left-color: var(--red); }
+  .measure h4 { margin: 0 0 10px; font-size: 1rem; }
+  .measure dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; }
+  .measure dt {
+    font-size: 0.68rem; text-transform: uppercase; letter-spacing: .09em;
+    color: var(--muted); padding-top: 2px; white-space: nowrap;
+  }
+  .measure dd { margin: 0; font-size: 0.88rem; }
+  .measure .verdict-line { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 0.88rem; }
+  .principle {
+    border: 1px solid var(--accent); border-radius: 10px; padding: 20px 22px;
+    background: rgba(94,224,160,.05); margin: 20px 0;
+  }
+  .principle p { margin: 0 0 12px; }
+  .principle p:last-child { margin-bottom: 0; }
+  .seen { font-size: 0.82rem; color: var(--muted); margin-top: 8px; }
+  .seen a { color: var(--accent); }
+  @media (max-width: 620px) {
+    .measure dl { grid-template-columns: 1fr; gap: 2px 0; }
+    .measure dt { padding-top: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="/">Tillbaka till leakscope</a>
+  <a href="#hotbild">Vem skyddar du dig mot</a>
+  <a href="#princip">Grundprincipen</a>
+  <a href="#atgarder">Åtgärderna</a>
+  <a href="#myter">Det som inte hjälper</a>
+  <a href="#invandningar">Invändningarna</a>
+  <a href="#paket">Vad du bör göra</a>
+</nav>
+
+<header>
+  <h1>Skydda dig — och vad det kostar</h1>
+  <p class="lead">
+    Det finns gott om listor med tio tips för integritet på nätet. Den här är inte en sådan.
+    Varje åtgärd nedan står med tre saker: vad den skyddar mot, vad den <em>inte</em> skyddar
+    mot, och vad den kostar. För nästan alla kostar något — och några av de mest populära
+    gör dig lättare att spåra, inte svårare.
+  </p>
+  <p class="lead">
+    Sidan förutsätter att du redan har tittat på <a href="/">vad din webbläsare lämnar ifrån
+    sig</a>. Råden pekar tillbaka dit, så att du kan se belägget för varje påstående på din
+    egen maskin i stället för att tro mig på mitt ord.
+  </p>
+</header>
+
+<main>
+
+<section id="hotbild">
+  <h2>1 · Först: vem skyddar du dig mot?</h2>
+  <p class="lead">
+    Det här är frågan nästan alla råd hoppar över, och därför är nästan alla råd dåliga.
+    Det finns inget som är «säkert». Det finns bara säkert <em>mot någon</em>. Samma åtgärd
+    kan vara avgörande mot en motpart och ren teater mot en annan.
+  </p>
+
+  <div class="picker">
+    <input type="radio" name="hot" id="h1" checked>
+    <input type="radio" name="hot" id="h2">
+    <input type="radio" name="hot" id="h3">
+    <input type="radio" name="hot" id="h4">
+
+    <div class="tabs">
+      <label for="h1">Annonsnätverk och datamäklare</label>
+      <label for="h2">Din internetleverantör eller nätägaren</label>
+      <label for="h3">Någon nära dig</label>
+      <label for="h4">Din arbetsgivare</label>
+    </div>
+
+    <div class="panels">
+
+      <div class="tp" id="tp1">
+        <div class="verdict bad">
+          De vill koppla ihop ditt surfande över olika sajter för att bygga och sälja en profil.
+          Det sker automatiserat, i enorm skala, och de bryr sig inte om just dig — du är en rad
+          i en databas.
+        </div>
+        <p><strong>Vad som faktiskt biter:</strong> en innehållsblockerare som stoppar deras
+        skript innan de laddas, en härdad webbläsare som gör dig lik alla andra användare, och
+        skilda profiler så att dina identiteter inte flyter ihop.</p>
+        <p><strong>Vad som är teater:</strong> privat läge, Do Not Track, och VPN. Inget av
+        dem hindrar en pixel från att känna igen din maskin.</p>
+        <p class="seen">Du såg det själv: i <a href="/">tredjepartsdemon</a> blockerade
+        webbläsaren spårarens cookie — och fingeravtrycket band ändå ihop båda sajterna.</p>
+      </div>
+
+      <div class="tp" id="tp2">
+        <div class="verdict bad">
+          Nätägaren ser vilka domäner du besöker även under HTTPS, genom DNS-uppslagen och
+          värdnamnet i TLS-handskakningen. Gäller din operatör hemma, caféets wifi, hotellet
+          och flygplatsen.
+        </div>
+        <p><strong>Vad som faktiskt biter:</strong> krypterad DNS (DoH eller DoT), Encrypted
+        Client Hello där det stöds, och ett VPN eller Tor. Det här är det enda scenariot där
+        ett VPN är ett genuint bra svar.</p>
+        <p><strong>Vad som är teater:</strong> fingeravtrycksskydd. Nätägaren bryr sig inte om
+        ditt grafikkort — den ser trafikmönster, inte sajtinnehåll.</p>
+        <p><strong>Observera:</strong> ett VPN tar inte bort problemet, det flyttar det. Nu ser
+        VPN-leverantören i stället för operatören. Välj utifrån vem du hellre litar på, och
+        förstå att ett gratis-VPN tjänar pengar på just det du försöker skydda.</p>
+      </div>
+
+      <div class="tp" id="tp3">
+        <div class="verdict bad">
+          En partner, familjemedlem, rumskamrat eller kollega med fysisk tillgång till din
+          enhet. Ser historik, sparade inloggningar, aviseringar på låsskärmen och öppna flikar.
+        </div>
+        <p><strong>Vad som faktiskt biter:</strong> skärmlås med en riktig kod, diskkryptering,
+        separata användarkonton på datorn, aviseringar dolda på låsskärmen, och tvåfaktor som
+        inte sitter i samma enhet. Privat läge är faktiskt vettigt här — det är det här
+        scenariot det är byggt för.</p>
+        <p><strong>Vad som är teater:</strong> allt fingeravtrycksskydd och alla VPN. Motparten
+        står bredvid dig; nätverket är irrelevant.</p>
+        <p><strong>Viktigt:</strong> om det här är din situation och den är otrygg, är tekniska
+        råd på en webbsida inte rätt hjälp. Att plötsligt ändra inställningar kan dessutom
+        uppmärksammas. Sök stöd hos någon som kan bedöma hela läget.</p>
+      </div>
+
+      <div class="tp" id="tp4">
+        <div class="verdict bad">
+          På utrustning arbetsgivaren äger och administrerar är det tekniska skyddet i praktiken
+          borta. Med ett installerat rotcertifikat går HTTPS att läsa i klartext, och med
+          enhetshantering går det att se i stort sett allt.
+        </div>
+        <p><strong>Vad som faktiskt biter:</strong> att använda din egen enhet för dina egna
+        ärenden. Det är hela svaret. Inga inställningar i jobbwebbläsaren ändrar det.</p>
+        <p><strong>Vad som är teater:</strong> privat läge, VPN installerat på jobbdatorn,
+        och att rensa historiken. Allt det syns ändå, och att försöka dölja sig kan i sig vara
+        ett brott mot policyn.</p>
+        <p><strong>Observera:</strong> det här är inte främst en teknisk fråga utan en juridisk
+        och social. Vad arbetsgivaren får övervaka regleras av lag och kollektivavtal, och det
+        skiljer sig mellan länder. Läs er policy innan du drar slutsatser åt något håll.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="princip">
+  <h2>2 · Grundprincipen: du gömmer dig i en mängd</h2>
+
+  <div class="principle">
+    <p><strong>Anonymitet är inte att vara osynlig. Det är att vara utbytbar.</strong></p>
+    <p>
+      Om femtiotusen personer har exakt samma webbläsarprofil som du, är du en av femtiotusen
+      och ingen kan peka ut dig. Ändrar du något för att «skydda dig» och blir den enda i
+      världen med just den kombinationen, har du i stället skapat ett unikt id åt dig själv.
+    </p>
+    <p>
+      Därför är en orörd Firefox i standardutförande svårare att peka ut än en Firefox med tolv
+      integritetstillägg och egenpillade inställningar. Mängden du gömmer dig i är det som
+      skyddar — inte hur ovanlig din konfiguration är.
+    </p>
+  </div>
+
+  <p>
+    Det följer en regel av det här som går emot magkänslan: <strong>välj verktyg som gör alla
+    sina användare lika, inte verktyg som gör dig speciell.</strong> Tor Browser och Mullvad
+    Browser är byggda på den principen — de försöker inte dölja att du använder dem, de försöker
+    få dig att se ut precis som varenda annan användare av samma webbläsare.
+  </p>
+  <p class="seen">
+    Du såg det själv: en «spoofad» User-Agent avslöjas direkt av headerordningen och
+    TLS-handskakningen, och kombinationen «påstår sig vara X men beter sig som Y» är ovanligare
+    än vilken ärlig profil som helst.
+  </p>
+</section>
+
+<section id="atgarder">
+  <h2>3 · Åtgärderna, var och en med sitt pris</h2>
+  <p class="lead">
+    Ordnade efter vad de ger i förhållande till vad de kostar. Grön kant betyder att jag tycker
+    den är värd det för de flesta, gul att det beror på, röd att den mest ger falsk trygghet.
+  </p>
+
+  <div class="measure">
+    <h4>Innehållsblockerare (uBlock Origin)</h4>
+    <dl>
+      <dt>Gör</dt><dd>Stoppar tredjepartsskript och spårpixlar innan de laddas. Spåraren får
+        aldrig veta att du var där.</dd>
+      <dt>Skyddar ej</dt><dd>Mot förstapartsspårning, alltså sajten du faktiskt besöker, och
+        inte mot fingeravtryck från den.</dd>
+      <dt>Kostar</dt><dd>Nära ingenting. Enstaka sajter klagar. Din filterlista går i sig att
+        detektera, vilket lägger till en liten gnutta unikhet.</dd>
+    </dl>
+    <p class="verdict-line"><strong>Omdöme:</strong> installera. Det bästa förhållandet mellan
+    nytta och kostnad som finns, och den enda åtgärden som dessutom gör webben trevligare att
+    använda.</p>
+  </div>
+
+  <div class="measure">
+    <h4>En härdad webbläsare (Mullvad Browser, Tor Browser)</h4>
+    <dl>
+      <dt>Gör</dt><dd>Harmoniserar alla sina användare mot en gemensam profil: samma
+        User-Agent, kvantiserad fönsterstorlek, UTC som tidszon, fast typsnittslista, blockerad
+        canvas-utläsning.</dd>
+      <dt>Skyddar ej</dt><dd>Mot att du loggar in. Är du inloggad på ett konto med ditt namn
+        spelar ingen fingeravtrycksteknik i världen någon roll.</dd>
+      <dt>Kostar</dt><dd>Sajter går sönder, video och kartor krånglar, och Tor-nätverket är
+        långsamt. Mullvad Browser är Tor Browsers profil utan Tor-nätverket — snabbare, men
+        döljer inte din IP på egen hand.</dd>
+    </dl>
+    <p class="verdict-line"><strong>Omdöme:</strong> den enskilt mest effektiva åtgärden mot
+    fingeravtryck. Men bara om du låter den vara som den är — börjar du ställa in och lägga
+    till tillägg river du ner precis det som gör den verksam.</p>
+  </div>
+
+  <div class="measure">
+    <h4>Skilda profiler eller behållare för skilda identiteter</h4>
+    <dl>
+      <dt>Gör</dt><dd>Ditt jobb-jag, privat-jag och köp-jag hamnar i var sin cookie-burk och
+        flyter inte ihop.</dd>
+      <dt>Skyddar ej</dt><dd>Mot fingeravtryck. Samma maskin ser likadan ut i alla profiler.</dd>
+      <dt>Kostar</dt><dd>Lite disciplin, inget annat.</dd>
+    </dl>
+    <p class="verdict-line"><strong>Omdöme:</strong> billigt och verkningsfullt mot
+    kontosammankoppling, som är den vanligaste vägen någon faktiskt kopplar ihop dina
+    identiteter. Firefox Multi-Account Containers är byggd för just det.</p>
+    <p class="seen">Du såg det själv: i avsnitt 5 var det skärm, tidszon, kärnor, grafikkort och
+    typsnitt som följde med genom varje byte av webbläsare.</p>
+  </div>
+
+  <div class="measure">
+    <h4>Krypterad DNS och Encrypted Client Hello</h4>
+    <dl>
+      <dt>Gör</dt><dd>Döljer vilka domäner du slår upp för nätägaren. ECH döljer dessutom
+        värdnamnet i TLS-handskakningen, som annars går i klartext.</dd>
+      <dt>Skyddar ej</dt><dd>Mot sajten själv, och inte mot den du flyttar dina DNS-uppslag
+        till.</dd>
+      <dt>Kostar</dt><dd>Nära noll. ECH kräver att sajten också stöder det, vilket många
+        ännu inte gör.</dd>
+    </dl>
+    <p class="verdict-line"><strong>Omdöme:</strong> slå på. Men var klar över att du byter
+    vem som ser dina uppslag, inte att de försvinner.</p>
+    <p class="seen">Du såg det själv: värdnamnet stod i klartext i TLS-handskakningen under
+    fältet SNI.</p>
+  </div>
+
+  <div class="measure weak">
+    <h4>VPN</h4>
+    <dl>
+      <dt>Gör</dt><dd>Döljer din IP-adress för sajten och ditt trafikmönster för nätägaren.</dd>
+      <dt>Skyddar ej</dt><dd>Mot fingeravtryck, cookies, inloggningar, tidszon eller
+        TLS-avtryck. Alltså mot nästan allt den här sajten mäter.</dd>
+      <dt>Kostar</dt><dd>Pengar, hastighet, fler captchas, och ibland att du ser mer misstänkt
+        ut än utan.</dd>
+    </dl>
+    <p class="verdict-line"><strong>Omdöme:</strong> bra mot nätägaren, nästan verkningslöst mot
+    annonsnätverk. Köp inte ett VPN för att «bli anonym» — det är inte vad det gör. Och ett
+    VPN i Frankfurt medan din tidszon säger Stockholm och ditt språk säger svenska berättar mer
+    om dig än inget VPN alls.</p>
+  </div>
+
+  <div class="measure weak">
+    <h4>Blockera tredjepartscookies</h4>
+    <dl>
+      <dt>Gör</dt><dd>Stoppar den klassiska spårningsvägen mellan sajter.</dd>
+      <dt>Skyddar ej</dt><dd>Mot fingeravtryck, som är precis vad branschen bytte till när
+        blockeringen blev standard.</dd>
+      <dt>Kostar</dt><dd>Enstaka inloggningsflöden går sönder.</dd>
+    </dl>
+    <p class="verdict-line"><strong>Omdöme:</strong> redan påslaget i de flesta webbläsare, och
+    bra. Men det är ett avklarat slag, inte ett vunnet krig.</p>
+  </div>
+</section>
+
+<section id="myter">
+  <h2>4 · Det som inte hjälper, fast det känns så</h2>
+
+  <div class="measure myth">
+    <h4>Privat läge</h4>
+    <p>Byter lagringsburk, inte maskin. Det raderar historik och cookies när du stänger
+    fönstret — och gör ingenting åt din IP, ditt grafikkort, dina typsnitt eller din tidszon.
+    Det skyddar mot den som har tillgång till din dator, vilket är ett verkligt och vanligt hot.
+    Det skyddar inte mot sajten du besöker, vilket är vad de flesta tror.</p>
+    <p class="seen">Du såg det själv: <strong>1 av 28</strong> avläsningar på den här sajten
+    påverkas av privat läge, och Firefox mot Firefox i privat läge gav noll stabila skillnader.</p>
+  </div>
+
+  <div class="measure myth">
+    <h4>Do Not Track</h4>
+    <p>En artig förfrågan som ingen är skyldig att hörsamma, och som i praktiken ignoreras.
+    Värre: att slå på den gör dig marginellt ovanligare. Global Privacy Control är samma idé
+    men har juridisk tyngd i vissa jurisdiktioner — den är värd att slå på, DNT är det inte.</p>
+  </div>
+
+  <div class="measure myth">
+    <h4>Att byta User-Agent</h4>
+    <p>Headerordningen, TLS-handskakningen och JS-motorns beteende avslöjar lögnen omedelbart.
+    Och en klient som påstår sig vara en sak men beter sig som en annan är ovanligare än vilken
+    ärlig profil som helst — du har gjort dig själv lättare att peka ut, inte svårare.</p>
+  </div>
+
+  <div class="measure myth">
+    <h4>Att blockera JavaScript</h4>
+    <p>Hjälper mot mycket, men inte mot så mycket som man tror. En stilmall ensam räcker för att
+    avslöja skärmstorlek, pixeltäthet, färgläge, pekdon och installerade typsnitt — och
+    typsnitten ger operativsystemet.</p>
+    <p class="seen">Du såg det själv på <a href="/noscript">sidan utan JavaScript</a>: 13
+    signaler och korrekt operativsystem, med skript helt avstängt.</p>
+  </div>
+
+  <div class="measure myth">
+    <h4>Att installera fler integritetstillägg</h4>
+    <p>Den vanligaste självmålen. Varje tillägg du lägger till gör din kombination ovanligare,
+    och flera av dem går att detektera utifrån. Tre tillägg är oftare sämre än ett. Ett
+    canvas-blockerande tillägg som returnerar slumpvärden gör dig dessutom identifierbar som
+    «personen vars canvas ändrar sig varje gång».</p>
+  </div>
+</section>
+
+<section id="invandningar">
+  <h2>5 · Invändningarna, på allvar</h2>
+  <p class="lead">
+    En sida som bara argumenterar för integritet är propaganda, inte utbildning. Det finns
+    verkliga kostnader och verkliga målkonflikter, och de är värda att ta på allvar.
+  </p>
+
+  <p><strong>Annonsblockering tar bort finansieringen för sajter du vill ska finnas.</strong>
+  Journalistik och oberoende publicister lever i stor utsträckning på annonsintäkter. Att
+  blockera är ett rimligt försvar mot övervakningsannonsering, men det är inte gratis för någon
+  annan. Betala för det du läser, om du kan.</p>
+
+  <p><strong>Anonymitetsverktyg skyddar även dem du inte vill skydda.</strong> Tor används av
+  journalister, visselblåsare och människor i diktaturer — och av kriminella. Det går inte att
+  bygga ett verktyg som bara fungerar för de goda; det är priset för att det fungerar
+  överhuvudtaget. Den som påstår att den avvägningen är enkel har inte förstått den.</p>
+
+  <p><strong>På jobbet står din integritet mot verkliga säkerhetsbehov.</strong> En arbetsgivare
+  som inte kan se något i nätverket kan inte heller upptäcka ett intrång. Avvägningen mellan
+  insyn och integritet är inte given, och den som avfärdar den ena sidan har fel oavsett vilken
+  sida det är.</p>
+
+  <p><strong>Att jaga total integritet kostar tid som gör mer nytta någon annanstans.</strong>
+  För de allra flesta ger två timmar på lösenordshanterare och tvåfaktor dramatiskt mycket mer
+  säkerhet än tjugo timmar på fingeravtrycksskydd. Hotbilden för en vanlig person är kapade
+  konton, inte annonsprofilering.</p>
+
+  <p><strong>Och: det mesta du läcker läcker för att du loggar in.</strong> Ingen
+  fingeravtrycksteknik behövs för att veta vem du är när du är inloggad på ett konto med ditt
+  namn. Den största enskilda åtgärden för de flesta är inte teknisk utan beteendemässig — att
+  inte vara inloggad överallt, hela tiden.</p>
+</section>
+
+<section id="paket">
+  <h2>6 · Vad du faktiskt bör göra</h2>
+
+  <div class="measure">
+    <h4>För de allra flesta</h4>
+    <p>uBlock Origin. En modern webbläsare med tredjepartscookies blockerade. Skilda profiler
+    för jobb och privat. Och logga ut från saker du inte använder just nu. Det kostar nästan
+    ingenting, tar bort merparten av den kommersiella spårningen, och går att leva med i
+    längden — vilket är det som avgör om det blir gjort.</p>
+  </div>
+
+  <div class="measure">
+    <h4>Om du vill längre</h4>
+    <p>Mullvad Browser för det surfande du bryr dig om. Krypterad DNS påslagen. Ett betalt VPN
+    om du ofta sitter på nät du inte litar på — valt för att du litar på leverantören, inte för
+    att det marknadsförs som anonymt.</p>
+  </div>
+
+  <div class="measure weak">
+    <h4>Om du har ett verkligt hot riktat mot dig</h4>
+    <p>Tor Browser, orörd, i standardutförande. Ändra ingenting, lägg inte till något. Och sök
+    hjälp som inte är en webbsida — hotbilden avgör vad som är rätt, och den kan den här sidan
+    inte bedöma åt dig.</p>
+  </div>
+
+  <h3>Varför det är värt något, även om du «inte har något att dölja»</h3>
+  <p>
+    Du har inget att dölja <em>idag</em>, för <em>den här</em> motparten, under <em>de här</em>
+    lagarna. Datat om dig överlever sannolikt alla tre.
+  </p>
+  <p>
+    Och profilering handlar sällan om att avslöja hemligheter. Den handlar om att förutsäga och
+    påverka vad du gör — vilket pris du får se, vilken försäkringspremie som räknas fram, vilka
+    nyheter som hamnar högst i ditt flöde, vilken annons som dyker upp just den dag du är som
+    mest mottaglig för den.
+  </p>
+  <p>
+    Integritet är inte samma sak som hemlighetsmakeri. Det är att få bestämma vem som vet vad
+    om dig. Att dra för gardinen betyder inte att du har något att dölja i vardagsrummet.
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <p>
+    Den här sidan kör inga skript. Hotbildsväljaren ovan är byggd av radioknappar och CSS —
+    en sida om skydd bör klara sig utan att köra kod hos läsaren.
+    <a href="/">Tillbaka till leakscope</a>
+  </p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,659 @@
+:root {
+  --bg: #0c0e12;
+  --panel: #13161c;
+  --panel-2: #181c24;
+  --line: #262c37;
+  --text: #dfe3ea;
+  --muted: #8b94a4;
+  --accent: #5ee0a0;
+  --red: #ff6b6b;
+  --amber: #f2b24c;
+  --mono: "JetBrains Mono", "Fira Code", "DejaVu Sans Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 16px 80px;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.6 ui-sans-serif, system-ui, "Inter", "Segoe UI", sans-serif;
+  max-width: min(1680px, 95vw);
+  margin-inline: auto;
+}
+
+header { padding: 48px 0 24px; border-bottom: 1px solid var(--line); }
+
+h1 {
+  font-family: var(--mono);
+  font-size: 2.2rem;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+h1::before { content: "▸ "; color: var(--accent); }
+
+h2 {
+  font-size: 1.25rem;
+  margin: 48px 0 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+h3 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 28px 0 10px;
+}
+
+.lead { color: var(--muted); max-width: 70ch; margin: 0 0 16px; }
+.muted { color: var(--muted); font-size: 0.88rem; }
+
+/* summary cards */
+.summary { display: flex; gap: 16px; flex-wrap: wrap; margin: 24px 0 16px; }
+.card {
+  flex: 1 1 280px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+}
+.card-label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.big {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  color: var(--accent);
+  word-break: break-all;
+}
+.card-note { display: block; margin-top: 6px; font-size: 0.82rem; color: var(--muted); }
+
+/* actions */
+.actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+button {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+button:hover { border-color: var(--accent); color: var(--accent); }
+.stamp { font-size: 0.8rem; color: var(--muted); }
+
+/* tags */
+.tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: 99px;
+  border: 1px solid currentColor;
+}
+.tag-red { color: var(--red); }
+.tag-amber { color: var(--amber); }
+
+/* panels and rows */
+.panel { margin-top: 8px; }
+
+.row {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 13px 15px;
+  margin-bottom: 9px;
+}
+.row-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.label { font-weight: 600; font-size: 0.93rem; }
+.bits {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--amber);
+  white-space: nowrap;
+}
+.value {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--accent);
+  margin: 8px 0;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+.fix { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
+.fix strong { color: var(--text); font-weight: 600; }
+
+/* key/value lines */
+.kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.87rem;
+  flex-wrap: wrap;
+}
+.kv span { color: var(--muted); }
+.kv code { font-family: var(--mono); font-size: 0.8rem; word-break: break-all; text-align: right; }
+.hl { color: var(--accent); font-weight: 600; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-family: var(--mono); }
+td { padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; word-break: break-word; }
+td.k { color: var(--amber); white-space: nowrap; width: 1%; }
+
+/* raw blocks */
+pre.raw {
+  background: #090b0e;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 12px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--muted);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+details.sub {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 10px 14px;
+  margin-bottom: 9px;
+}
+details.sub summary { cursor: pointer; font-size: 0.85rem; color: var(--muted); }
+details.sub summary:hover { color: var(--accent); }
+details.sub[open] summary { margin-bottom: 10px; }
+
+/* takeaway */
+.takeaway { margin-top: 56px; }
+.takeaway ul { max-width: 75ch; padding-left: 20px; }
+.takeaway li { margin-bottom: 10px; color: var(--muted); }
+.takeaway li strong { color: var(--text); }
+.takeaway p { max-width: 75ch; color: var(--muted); }
+
+code { font-family: var(--mono); font-size: 0.85em; }
+
+footer {
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+@media (max-width: 620px) {
+  .kv { flex-direction: column; gap: 2px; }
+  .kv code { text-align: left; }
+}
+
+/* --- avsnitt 4: spara och jämför besök --- */
+.tag-green { color: var(--accent); }
+
+.savebar, .comparebar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.savebar input, .comparebar select {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 7px 11px;
+}
+.savebar input { flex: 1 1 260px; min-width: 0; }
+.comparebar select { flex: 1 1 240px; min-width: 0; max-width: 100%; }
+.savebar input:focus, .comparebar select:focus { outline: none; border-color: var(--accent); }
+.vs { color: var(--muted); font-size: 0.85rem; }
+
+button.mini { padding: 3px 9px; font-size: 0.75rem; }
+
+.verdict {
+  border-radius: 9px;
+  padding: 12px 15px;
+  margin: 10px 0 16px;
+  font-size: 0.92rem;
+  border: 1px solid;
+}
+.verdict.bad { color: var(--red); border-color: var(--red); background: rgba(255, 107, 107, 0.07); }
+.verdict.good { color: var(--accent); border-color: var(--accent); background: rgba(94, 224, 160, 0.07); }
+
+.difftable td { font-size: 0.78rem; width: 40%; }
+.difftable td.k { width: 20%; white-space: normal; color: var(--text); font-family: inherit; }
+.difftable tr:first-child td { color: var(--muted); font-weight: 600; }
+.side {
+  display: block;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* --- jämförelsetabell sida vid sida --- */
+.difflegend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin: 14px 0 10px;
+}
+.difflegend b { font-size: 0.9rem; margin-right: 5px; }
+.m-stable { color: var(--red); }
+.m-vol { color: var(--amber); }
+.m-same { color: var(--muted); }
+
+.sidebyside { table-layout: fixed; }
+.sidebyside td { width: 33%; }
+.sidebyside td.k { width: 26%; }
+
+.sidebyside .headrow td {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 8px;
+}
+.sidebyside .grouprow td {
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-top: 18px;
+  border-bottom: 1px solid var(--line);
+  width: auto;
+}
+
+.sidebyside .mark {
+  display: inline-block;
+  width: 14px;
+  font-size: 0.85rem;
+}
+.sidebyside tr.r-stable { background: rgba(255, 107, 107, 0.09); }
+.sidebyside tr.r-stable td.k { color: var(--red); }
+.sidebyside tr.r-stable td.k .mark { color: var(--red); }
+.sidebyside tr.r-volatile { background: rgba(242, 178, 76, 0.07); }
+.sidebyside tr.r-volatile td.k { color: var(--amber); }
+.sidebyside tr.r-volatile td.k .mark { color: var(--amber); }
+.sidebyside tr.r-same td { color: var(--muted); }
+.sidebyside tr.r-same td.k { color: var(--muted); }
+
+/* --- avsnitt 5: matrisen över vad som följer med dig --- */
+.matrixwrap { overflow-x: auto; margin: 14px 0 8px; }
+
+table.matrix {
+  border-collapse: separate;
+  border-spacing: 2px;        /* ytglipan mellan intilliggande fält */
+  width: auto;
+  min-width: 100%;
+}
+table.matrix th {
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  padding: 0 4px 6px;
+  vertical-align: bottom;
+  max-width: 96px;
+}
+table.matrix th span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+table.matrix td { border: none; padding: 0; }
+
+table.matrix td.mk {
+  font-size: 0.78rem;
+  color: var(--text);
+  white-space: nowrap;
+  padding-right: 12px;
+  width: 1%;
+  position: relative;
+}
+table.matrix td.mk .side {
+  display: inline;
+  margin-left: 8px;
+  font-size: 0.62rem;
+}
+table.matrix td.mk .dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  margin-right: 8px;
+  background: var(--line);
+  vertical-align: middle;
+}
+tr.m-inv td.mk .dot { background: var(--red); }
+tr.m-inv-weak td.mk .dot { background: var(--amber); }
+tr.m-varies td.mk { color: var(--muted); }
+
+table.matrix td.cell {
+  width: 34px;
+  min-width: 34px;
+  height: 26px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #0c0e12;
+  border-radius: 4px;
+  cursor: default;
+}
+table.matrix td.cell:hover { outline: 2px solid var(--text); outline-offset: -2px; }
+
+.difflegend .swatch {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 18px;
+  border-radius: 4px;
+  color: #0c0e12;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+ul.invlist { list-style: none; padding: 0; margin: 8px 0 0; }
+ul.invlist li {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--red);
+  border-radius: 7px;
+  padding: 9px 13px;
+  margin-bottom: 7px;
+  font-size: 0.86rem;
+}
+ul.invlist code { color: var(--accent); font-size: 0.76rem; word-break: break-all; }
+ul.invlist .bits { font-family: var(--mono); font-size: 0.7rem; color: var(--amber); }
+
+#viztip {
+  position: absolute;
+  z-index: 50;
+  max-width: 330px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 0.78rem;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+#viztip[aria-hidden="true"] { display: none; }
+#viztip strong { display: block; }
+#viztip .t-visit { display: block; color: var(--muted); font-size: 0.72rem; margin-bottom: 5px; }
+#viztip code { color: var(--accent); font-size: 0.74rem; word-break: break-all; }
+tr.m-empty td.mk { color: var(--muted); opacity: 0.55; }
+tr.m-empty td.cell { opacity: 0.4; }
+
+/* --- märkning för privat läge + förklaringar vid hovring --- */
+.priv {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+  margin-left: auto;
+  margin-right: 10px;
+}
+.p-nej { color: var(--red); }
+.p-delvis { color: var(--amber); }
+.p-ja { color: var(--accent); }
+
+.row[data-tip] { cursor: help; }
+.row[data-tip]:hover { border-color: var(--muted); }
+.row.bare { padding-top: 4px; }
+
+h3 .priv { margin-left: 12px; vertical-align: middle; }
+
+.card-alert { border-color: var(--red); }
+.card-alert .big { color: var(--red); }
+
+#viztip .t-priv {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid currentColor;
+  margin: 7px 0 6px;
+}
+#viztip .t-why { display: block; color: var(--muted); font-size: 0.76rem; }
+.privwrap { display: inline-block; cursor: help; margin: 8px 0; }
+.privwrap .priv { margin-left: 0; }
+
+/* --- navigationsraden --- */
+#nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 14px 0 4px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 20;
+}
+#nav a, #nav span.off {
+  font-size: 0.78rem;
+  padding: 5px 11px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--text);
+  white-space: nowrap;
+}
+#nav a:hover { border-color: var(--accent); color: var(--accent); }
+#nav a.ext { border-color: var(--amber); color: var(--amber); }
+#nav a.ext:hover { background: rgba(242, 178, 76, 0.1); }
+#nav span.off { color: var(--muted); border-style: dashed; cursor: help; }
+#nav span.off code { color: var(--amber); font-size: 0.9em; }
+
+/* Guiden ska sticka ut som sidans enda konstruktiva utgång. */
+#nav a.guide { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+#nav a.guide:hover { background: rgba(94, 224, 160, 0.1); }
+
+/* Brödtextlänkar saknade färg och hamnade på webbläsarens mörkblå,
+   vilket är nästan oläsligt mot den mörka bakgrunden. Nav och knappar
+   har egna, mer specifika regler och påverkas inte. */
+a { color: var(--accent); }
+a:hover { color: var(--text); }
+
+/* --- nivån: två mätare och en sammanfattning --- */
+.levelbox {
+  border: 1px solid; border-radius: 10px; padding: 18px 20px; margin-bottom: 20px;
+}
+.levelbox.t-good { border-color: var(--accent); background: rgba(94,224,160,.07); }
+.levelbox.t-warn { border-color: var(--amber); background: rgba(242,178,76,.07); }
+.levelbox.t-bad  { border-color: var(--red);   background: rgba(255,107,107,.07); }
+.level-label {
+  display: block; font-size: 0.7rem; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--muted);
+}
+.level-name { display: block; font-size: 1.8rem; margin: 6px 0 10px; letter-spacing: -.01em; }
+.levelbox.t-good .level-name { color: var(--accent); }
+.levelbox.t-warn .level-name { color: var(--amber); }
+.levelbox.t-bad  .level-name { color: var(--red); }
+.levelbox p { margin: 0; font-size: 0.92rem; }
+
+.meter { margin-bottom: 18px; }
+.meter-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 0.88rem; margin-bottom: 7px;
+}
+.meter-head code { font-family: var(--mono); font-size: 0.85rem; }
+.meter-track {
+  height: 10px; background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 6px; overflow: hidden;
+}
+.meter-fill { height: 100%; border-radius: 4px; }
+.meter-fill.t-good { background: var(--accent); }
+.meter-fill.t-warn { background: var(--amber); }
+.meter-fill.t-bad  { background: var(--red); }
+.meter p { margin: 6px 0 0; font-size: 0.8rem; }
+
+ul.findings { list-style: none; padding: 0; margin: 8px 0 20px; }
+ul.findings li {
+  background: var(--panel); border: 1px solid var(--line);
+  border-left: 3px solid var(--line); border-radius: 7px;
+  padding: 10px 14px; margin-bottom: 7px; font-size: 0.88rem;
+}
+ul.findings.bad li { border-left-color: var(--red); }
+ul.findings.good li { border-left-color: var(--accent); }
+
+/* --- avsnitt 6: tratten som smalnar av till en --- */
+.funnel { margin: 10px 0 22px; }
+.funnel .step { margin-bottom: 14px; }
+.funnel .step-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 12px; font-size: 0.88rem; margin-bottom: 6px;
+}
+.funnel .step-head code { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+.funnel .step:last-child .step-head code { color: var(--red); font-weight: 600; }
+.funnel .stepno {
+  display: inline-grid; place-items: center; width: 19px; height: 19px;
+  border-radius: 5px; background: var(--panel-2); border: 1px solid var(--line);
+  font-family: var(--mono); font-size: 0.68rem; color: var(--muted);
+  margin-right: 8px; vertical-align: middle;
+}
+.funnel .step p { margin: 5px 0 0; font-size: 0.78rem; }
+.funnel .step p code { color: var(--accent); word-break: break-all; }
+.funnel .side { margin-left: 8px; font-size: 0.62rem; display: inline; }
+
+/* --- klartextrutan: samma sak, utan jargong --- */
+.plainbox {
+  border: 1px solid var(--accent); border-radius: 10px;
+  background: rgba(94, 224, 160, .05);
+  padding: 20px 24px; margin-bottom: 24px;
+}
+.plain-label {
+  display: block; font-size: 0.7rem; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--accent); margin-bottom: 10px;
+}
+.plain-lead { margin: 0 0 12px; font-size: 1.05rem; }
+.plain-list { margin: 0 0 14px; padding-left: 24px; }
+.plain-list li { margin-bottom: 8px; font-size: 1rem; line-height: 1.55; }
+.plain-list b { color: var(--accent); font-weight: 600; }
+.plain-end { margin: 0 0 10px; font-size: 0.95rem; color: var(--muted); }
+.plain-end:last-child { margin-bottom: 0; }
+.plain-end strong { color: var(--text); }
+
+/* ===========================================================
+   Breda skärmar: korten läggs i rutnät i stället för en enda
+   lång kolumn. Brödtext hålls kvar på läsbar radlängd — en
+   bredare sida ska ge fler kort bredvid varandra, inte längre
+   textrader.
+   =========================================================== */
+
+/* Avsnitt 1 och 2: raderna paras ihop, rubriker och tabeller
+   spänner över hela bredden. */
+#client, #server {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+#client .row, #server .row { display: flex; flex-direction: column; }
+#client .row .fix, #server .row .fix { margin-top: auto; }
+#client > *:not(.row),
+#server > *:not(.row) { grid-column: 1 / -1; }
+#client .row, #server .row { margin-bottom: 0; }
+#client h3 { margin-top: 20px; }
+#client h3:first-child { margin-top: 4px; }
+
+/* Fyndlistor och profilpåståenden */
+ul.findings, ul.invlist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 8px;
+  align-items: stretch;
+}
+ul.findings li, ul.invlist li { margin-bottom: 0; }
+
+/* Tratten och mätarna mår bra av att ligga sida vid sida */
+.funnel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 10px 22px;
+}
+.funnel .step { margin-bottom: 0; }
+
+/* Nivåns två mätare bredvid varandra när det får plats */
+#level .meter { display: inline-block; width: 100%; }
+@media (min-width: 1100px) {
+  .meterpair { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+}
+
+/* Prosan behåller läsbar radlängd oavsett hur bred sidan är */
+.lead, .plain-end, .muted, .verdict { max-width: 95ch; }
+.plainbox { max-width: 110ch; }
+
+/* Besökslistan och jämförelsetabellerna får utnyttja bredden */
+.difftable td { font-size: 0.8rem; }
+
+@media (max-width: 900px) {
+  #client, #server, ul.findings, ul.invlist, .funnel {
+    grid-template-columns: 1fr;
+  }
+  #client .row, #server .row { margin-bottom: 0; }
+}
+
+/* Avsnitt 1 har få kort men flera tabeller som spänner över hela bredden.
+   auto-fit kan inte kollapsa tomma spår när något spänner över dem, så
+   korten blev liggande i två av tre kolumner med en tom tredjedel. Två
+   fasta kolumner fyller raden i stället. */
+@media (min-width: 1100px) {
+  #server { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Märker ut vilken kolumn som är webbläsaren du sitter i. */
+.dumark {
+  display: inline-block;
+  margin-left: 7px;
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: var(--accent);
+  color: #0c0e12;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  vertical-align: middle;
+}
+table.matrix th .dumark { margin: 4px 0 0; display: inline-block; }
